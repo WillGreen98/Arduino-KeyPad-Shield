@@ -9,53 +9,31 @@
 #define btnNONE 5
 
 int lcd_key = 0;
-int adc_key_in = 0;
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+const char *button[7] = {"Right ", "Up ", "Down ", "Left ", "Select ", "None ", "Whaa? "};
 
-int read_LCD_buttons() {
-    adc_key_in = analogRead(0);
+int readkeypad(){
+    int adc_key_in = analogRead(0);
+    int ret;
+    
+    if(adc_key_in < 50) ret = btnRIGHT;
+    if((adc_key_in > 500) && (adc_key_in < 1150)) { ret = btnNONE; }
+    if((adc_key_in > 120) && (adc_key_in < 150) ) { ret = btnUP; }
+    if((adc_key_in > 250) && (adc_key_in < 350) ) { ret = btnDOWN; }
+    if((adc_key_in > 450) && (adc_key_in < 500) ) { ret = btnLEFT; }
+    if((adc_key_in > 700) && (adc_key_in < 750) ) { ret = btnSELECT; }
 
-    if(adc_key_in > 1000) { return btnNONE; }
-    if(adc_key_in < 50) { return btnRIGHT; }
-    if(adc_key_in < 250) { return btnUP; }
-    if(adc_key_in < 450) { return btnDOWN; }
-    if(adc_key_in < 650) { return btnLEFT; }
-    if(adc_key_in < 850) { return btnSELECT; }
+    return ret;
 }
 
 void setup() {
     lcd.begin(16, 2);
+    lcd.setCursor(0, 0);
     lcd.print("Push a button");
 }
 
 void loop() {
     lcd.setCursor(0, 1);
-    lcd_key = read_LCD_buttons();
-
-    switch(lcd_key) {
-        case btnRIGHT: {
-            lcd.print("Right");
-            break;
-        }
-        case btnLEFT: {
-            lcd.print("Left");
-            break;
-        }
-        case btnUP: {
-            lcd.print("Up");
-            break;
-        }
-        case btnDOWN: {
-            lcd.print("Down");
-            break;
-        }
-        case btnSELECT: {
-            lcd.print("Select");
-            break;
-        }
-        case btnNONE: {
-            lcd.print("None");
-            break;
-        }
-    }
+    lcd.print("Pressed: ");
+    lcd.print(button[readkeypad()]);
 }
