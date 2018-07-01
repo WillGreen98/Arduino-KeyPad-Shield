@@ -12,7 +12,7 @@ int lcd_key = 0;
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 const char *button[7] = {"Right ", "Up ", "Down ", "Left ", "Select ", "None ", "Whaa? "};
 
-int readkeypad(){
+int readkeypad() {
     int adc_key_in = analogRead(0);
     int ret;
     
